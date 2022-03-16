@@ -31,6 +31,13 @@ app.use(express.static('imgs'))
 app.use(express.static('imgs/ords'))
 
 // retourne toutes les pharmacies
+app.get('/' , async (req, res) =>{
+   
+    res.status(201).send("Hello")
+});
+
+
+// retourne toutes les pharmacies
 app.get('/products' , async (req, res) =>{
     const results = await db.getAllProducts();    
     res.status(201).send(results)
