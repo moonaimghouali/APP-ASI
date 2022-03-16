@@ -42,6 +42,11 @@ app.get('/products' , async (req, res) =>{
     res.status(201).send(results)
 });
 
+app.get('/products/:id_product' , async (req, res) =>{
+    const results = await db.getProduct(req.params.id_product);    
+    res.status(201).send(results[0])
+});
+
 app.get('/products/:categorie' , async (req, res) =>{
     const results = await db.getCategorieProducts(req.params.categorie);    
     res.status(201).send(results)
@@ -58,7 +63,7 @@ app.get('/test' , (req,res) =>{
 });
 
 
-app.listen(process.env.PORT || 5000, () =>{ console.log("server is running on port 3000")});
+app.listen(process.env.PORT || 3000, () =>{ console.log("server is running on port 3000")});
 
 
 

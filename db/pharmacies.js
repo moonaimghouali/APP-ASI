@@ -7,6 +7,12 @@ function getAllProducts() {
 }
 
 //working
+function getProduct(id_product) {
+    return knex("Products").select("*")
+    .where("Products.id_product",id_product);
+}
+
+//working
 function getCategorieProducts(categorie) {
     return knex("Products")
     .select("*")
@@ -33,6 +39,7 @@ function getCommandeProducts(id_commande) {
 
 module.exports = {
     getAllProducts,
+    getProduct,
     getCategorieProducts,
     getCommandeProducts
 }
