@@ -10,6 +10,7 @@ const fse = require('fs-extra');
 const stream = require('stream');
 const mime = require('mime');
 const crypto = require('crypto');
+const { response } = require('express');
 
 
 var storage = multer.diskStorage({
@@ -47,14 +48,41 @@ app.get('/products/:id_product' , async (req, res) =>{
     res.status(201).send(results[0])
 });
 
-app.get('/products/:categorie' , async (req, res) =>{
-    const results = await db.getCategorieProducts(req.params.categorie);    
+app.get('/products/category/:productCategory' , async (req, res) =>{
+    const results = await db.getCategorieProducts(req.params.productCategory);    
     res.status(201).send(results)
 });
 
-app.get('/commandes/:id_commande' , async (req, res) =>{
-    const results = await db.getCommandeProducts(req.params.id_commande);    
-    res.status(201).send(results)
+app.get('/commandes' , async (req, res) =>{
+
+  var response = []
+
+  const commandesId = await db.getCommandesId();
+
+  const ids =[]
+  commandesId.forEach(cmd =>{
+    ids.push(cmd.id_commande)
+  })
+  
+   for await (const id of ids){
+
+    const commande = await db.getCommande(id);    
+    const commandeProducts = await db.getCommandeProducts(id)
+
+    const cmd =  {"id_commande" :commande[0].id_commande , "date" : commande[0].date ,
+    "montantTotale" : commande[0].montantTotale ,"products" : commandeProducts}
+
+    response.push(cmd)
+   }
+
+    res.status(201).send(response)
+   
+});
+
+app.post('/commandes' , async (req,res) =>{
+  const commande  = req.body
+  const response = await db.addCommande(commande)
+  res(201).send(`commande posted succesfully id = ${response}`)
 });
 
 
@@ -66,6 +94,10 @@ app.get('/test' , (req,res) =>{
 app.listen(process.env.PORT || 3000, () =>{ console.log("server is running on port 3000")});
 
 
+
+function delay(time) {
+  return new Promise(resolve => setTimeout(resolve, time));
+}
 
 
 
