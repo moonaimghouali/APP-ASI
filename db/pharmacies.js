@@ -25,6 +25,7 @@ function getCategorieProducts(productCategory) {
 function getCommandesId() {
     return knex.select("id_commande")
     .from("Commande")
+    .orderBy('id_commande','desc')
     
 }
 
@@ -45,20 +46,20 @@ function getCommandeProducts(id_commande) {
     //.where("Products.productCategory",categorie);
 }
 
-function addCommande(commande) {
+function addCommande(id_commande , date, montantTotale) {
     return knex('Commande')
     .insert(
-    {id_commande: 1,
-    date: commande.date,
-    montantTotale: commande.montantTotal
+    {
+    date: date,
+    montantTotale: montantTotale
     })
 }
 
-function addCommandeProducts(id_product , quantite) {
+function addCommandeProducts(id_commande , id_product , quantite) {
     return knex('Commande_products')
     .insert(
-    {id_commande: 1,
-    id_commande: id_product,
+    {id_commande: id_commande,
+    id_product: id_product,
     quantite: quantite
     })
 }

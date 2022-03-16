@@ -81,8 +81,14 @@ app.get('/commandes' , async (req, res) =>{
 
 app.post('/commandes' , async (req,res) =>{
   const commande  = req.body
-  const response = await db.addCommande(commande)
-  res(201).send(`commande posted succesfully id = ${response}`)
+  products = commande.products
+  const response = await db.addCommande(commande.id_commande , commande.date , commande.montantTotale)
+
+  for(const prod of products){
+    await db.addCommandeProducts(response[0] ,prod.id_product , prod.quantite)
+  }
+  
+  res.status(201).send("true")
 });
 
 
