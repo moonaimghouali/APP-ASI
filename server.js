@@ -32,7 +32,7 @@ app.use(express.static('imgs/ords'))
 
 // retourne toutes les pharmacies
 app.get('/' , async (req, res) =>{
-    res.send("Hello world")
+    res.send("Hello mounaim")
 });
 
 
